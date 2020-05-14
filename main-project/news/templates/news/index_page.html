@@ -1,1 +1,10 @@
-index_page
+<div>
+    <h2>{{ title }}</h2>
+</div>
+<div>
+    {% for item in news %}
+        <p>{{ item.title }}</p>
+        <p>{{ item.created_at }}</p>
+        <hr>
+    {% endfor %}
+</div>
