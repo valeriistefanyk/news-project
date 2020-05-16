@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    {% block link %}{% endblock %}
+    <title>{% block title %}Сайт новин{% endblock %}</title>
+</head>
+<body>
+    {% include 'includs/_nav.html' %}
+    <div id="app" class="app">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>
