@@ -1,26 +1,28 @@
 {% extends 'base_news.html' %}
 {% load static %}
 
+{% block title %}Новини категорії {{ current_category.title }}{% endblock %}
+
 {% block heading_page %}
 <div>
-    <h2 class="mt-3">{{ title }}</h2>
+    <h2 class="mt-3">{{ current_category.title }}</h2>
 </div>
 {% endblock %}
 
 {% block sidebar_news %}
-<div class="list-group">
-    {% for item in categories %}
-    <a href="{% url 'news:category' item.id %}" class="list-group-item list-group-item-action">{{ item.title }}</a>
-    {% endfor %}
-    <a href="{% url 'news:index-page' %}" class="list-group-item list-group-item-action active">Всі новини</a>
-</div>
+    <div class="list-group">
+        {% for item in categories %}
+        <a href="{% url 'news:category' item.id %}" class="list-group-item list-group-item-action {% if current_category.id == item.id %}active{% endif %}">{{ item.title }}</a>
+        {% endfor %}
+        <a href="{% url 'news:index-page' %}" class="list-group-item list-group-item-action">Всі новини</a>
+    </div>
 {% endblock %}
 
 {% block content_news %}
-{% for item in news %}
+    {% for item in news %}
     <div class="card mb-3">
         <div class="card-header">
-            Категорія <a href="{% url 'news:category' item.category.id %}">{{ item.category.title }}</a>
+            Категорія {{ item.category.title }}
         </div>
         <div class="card-body">
             <h5 class="card-title {% cycle 'text-danger' 'text-success' %}">{{ item.title }}</h5>
