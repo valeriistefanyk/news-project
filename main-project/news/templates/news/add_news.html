@@ -1,0 +1,63 @@
+{% extends 'base_news.html' %}
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Створення новини</h1>
+<form action="{% url 'news:add-news' %}" method="POST">
+    {% csrf_token %}
+
+    {% comment 'Перший метод відображення форми' %}
+    {{ form.non_field.errors }}
+    <div class="form-group">
+        <label for="{{ form.title.id_for_label }}">Назва</label>
+        {{ form.title }}
+        {{ form.title.errors }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.content.id_for_label }}">Текст новини</label>
+        {{ form.content }}
+        <div class="invalid-feedback">
+            {{ form.content.errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ form.is_published.id_for_label }}">Опубліковати?</label>
+        {{ form.is_published }}
+        <div class="invalid-feedback">
+            {{ form.is_published.errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ form.category.id_for_label }}">Категорія</label>
+        {{ form.category }}
+        <div class="invalid-feedback">
+            {{ form.category.errors }}
+        </div>
+    </div>
+    {% endcomment %}
+
+    {% comment 'Другий метод відображення форми' %}
+    {% endcomment %}
+    {{ form.as_p }}
+    
+
+    {% comment 'Другий метод відображення форми' %}
+    {{ form.non_field.errors }}
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        <div class="invalid-feedback">
+            {{ field.errors }}
+        </div>
+    </div>
+    {% endfor %}
+    {% endcomment %}
+
+    <button type="submit" class="btn btn-primary btn-block">Додати новину</button>
+</form>
+{% endblock content %}
