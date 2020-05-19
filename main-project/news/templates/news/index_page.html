@@ -19,17 +19,15 @@
         </div>
         <div class="card-body">
             <h5 class="card-title {% cycle 'text-danger' 'text-success' %}">{{ item.title }}</h5>
-            <div class="media">
+            
                 {% if item.photo %}
-                <img src="{{ item.photo.url }}" alt="Фото статті" width="350" class="mr-3">
+                <img src="{{ item.photo.url }}" alt="Фото статті" width="350" class="float-left mr-3">
                 {% else %}
                 <img src="{% static 'image/no_image.png' %}" alt="Фото для статті не знайдено" width="350" class="mr-3">
                 {% endif %}
-                <div class="media-body">
                     <p class="card-text">{{ item.content|safe|linebreaksbr|truncatewords:'50' }}</p>
                     <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Перейти до новини</a>
-                </div>
-            </div>
+               
         </div>
         <div class="card-footer text-muted">
             {{ item.created_at|date:"d.m.Y H:m:i" }}
