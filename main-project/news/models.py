@@ -15,7 +15,9 @@ class News(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Відредаговано')
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True, verbose_name='Фото')
     is_published = models.BooleanField(default=True, verbose_name='Опубліковано')
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, blank=True, verbose_name='Категорія')
+    views = models.IntegerField(default=0)
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, blank=True, 
+        verbose_name='Категорія', related_name='get_news')
 
     def get_absolute_url(self):
         return reverse('news:view-news', kwargs={"pk": self.pk})

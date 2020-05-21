@@ -1,0 +1,20 @@
+{% extends 'base_news.html' %}
+{% load static %}
+
+{% block heading_page %}
+<div>
+    <h2 class="mt-3">{{ title }}</h2>
+</div>
+{% endblock %}
+
+{% block content_news %}
+{% for item in page_obj %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title {% cycle 'text-danger' 'text-success' %}">{{ item.title }}</h5>
+          
+        </div>
+    </div>
+    {% endfor %}
+    
+{% endblock %}
