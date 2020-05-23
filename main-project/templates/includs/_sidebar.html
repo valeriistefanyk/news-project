@@ -1,0 +1,14 @@
+{% load news_tags %}
+
+<div class="list-group">
+    {% get_list_categories as categories %}
+    {% for item in categories %}
+    <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action {% if current_category.id == item.id %}active{% endif %}">{{ item.title }}
+    <span class="badge badge-primary badge-pill ml-1"> {{ item.cnt }}</span></a>
+    {% endfor %}
+    <a href="{% url 'news:index-page' %}" class="list-group-item list-group-item-action">Всі новини</a>
+</div>
+
+{% comment "Testing inclusion tags" %}
+{% show_categories arg2='User' %}
+{% endcomment %}

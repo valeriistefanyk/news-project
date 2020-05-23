@@ -1,31 +1,86 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from news.models import News, Category
+from news.froms import NewsForm, ContactForm
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.contrib import messages
 
+from django.core.paginator import Paginator
 
-def index_page(request):
-    """ Стартова сторінка """
-
+def test(request):
     context = {}
-    news = News.objects.all()
-    categories = Category.objects.all()
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            print(
+                form.cleaned_data['subject'],
+                form.cleaned_data['content']
+            )
+            mail = send_mail(
+                form.cleaned_data['subject'],
+                form.cleaned_data['content'],
+                'valeriistefanyk@ukr.net',
+                ['valeriistefanyk@gmail.com'],
+                fail_silently=True
+            )
+            if mail:
+                messages.success(request, 'Успішно відправлено :)')
+                return redirect('news:test')
+            else:
+                messages.error(request, 'Помилка відправки :(')
+    else:
+        form = ContactForm()
+    context['form'] = form
+    return render(request, 'news/test.html', context)
 
-    context['title'] = 'Всі новини'
-    context['news'] = news
-    context['categories'] = categories
+
+class HomeNews(ListView):
+    """ Всі новини """
+
+    model = News
+    template_name = 'news/index_page.html'
+    context_object_name = 'news'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Всі новини'
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(is_published=True)
+
+
+class NewsByCategory(ListView):
+    """ Новини по категорії """
+
+    model = News
+    template_name = 'news/index_page.html'
+    context_object_name = 'news'
+    allow_empty = False
+
+    def get_context_data(self, *, object_list = None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Category.objects.get(pk=self.kwargs['category_id']).title
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(category_id=self.kwargs['category_id'], 
+            is_published=True)
+
+
+class ViewNews(DetailView):
+    """ Перегляд конкретної новини """
+
+    model = News
+    context_object_name = 'news_item'
     
-    return render(request, 'news/index_page.html', context)
+class CreateNews(LoginRequiredMixin, CreateView):
+    """ Створення новини """
 
-
-def get_category(request, category_id):
-    """ Новини конкретної категорії """
-
-    context = {}
-
-    news = News.objects.filter(category_id=category_id)
-    categories = Category.objects.all()
-    category = categories.get(pk=category_id)
-    context['news'] = news
-    context['categories'] = categories
-    context['current_category'] = category
-
-    return render(request, 'news/news_category.html', context)
+    form_class = NewsForm
+    template_name = 'news/add_news.html'
+    # success_url = reverse_lazy('news:index-page')
+    login_url = '/admin/'

@@ -4,6 +4,9 @@ from news import views
 
 app_name = 'news'
 urlpatterns = [
-    path('', views.index_page, name='index-page'),
-    path('category/<int:category_id>/', views.get_category, name='category'),
+    path('', views.HomeNews.as_view(), name='index-page'),
+    path('category/<int:category_id>/', views.NewsByCategory.as_view(), name='category'),
+    path('<int:pk>/', views.ViewNews.as_view(), name='view-news'),
+    path('add/', views.CreateNews.as_view(), name='add-news'),
+    path('test/', views.test, name='test'),
 ]
