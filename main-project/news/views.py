@@ -1,20 +1,39 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from news.models import News, Category
-from news.froms import NewsForm
+from news.froms import NewsForm, ContactForm
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
+from django.core.mail import send_mail
+from django.contrib import messages
 
 from django.core.paginator import Paginator
 
 def test(request):
-    objects = ['john', 'valerii', 'some', 'something 4', 'something 5']
-    paginator = Paginator(objects, 2)
-    page_num = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_num)
-    return render(request, 'news/test.html', {'page_obj': page_obj})
+    context = {}
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            print(
+                form.cleaned_data['subject'],
+                form.cleaned_data['content']
+            )
+            mail = send_mail(
+                form.cleaned_data['subject'],
+                form.cleaned_data['content'],
+                'valeriistefanyk@ukr.net',
+                ['valeriistefanyk@gmail.com'],
+                fail_silently=True
+            )
+            if mail:
+                messages.success(request, 'Успішно відправлено :)')
+                return redirect('news:test')
+            else:
+                messages.error(request, 'Помилка відправки :(')
+    else:
+        form = ContactForm()
+    context['form'] = form
+    return render(request, 'news/test.html', context)
 
 
 class HomeNews(ListView):
