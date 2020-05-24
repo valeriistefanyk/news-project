@@ -14,7 +14,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+INTERNAL_IPS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +23,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'ckeditor',
+    'ckeditor_uploader',
 
     'news.apps.NewsConfig',
     'accounts.apps.AccountsConfig',
@@ -101,8 +104,10 @@ STATICFILES_DIRS = [
 MEDIA_URL = env.str('MEDIA_URL', default='/media/')
 MEDIA_ROOT = public_root('media')
 
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
-INTERNAL_IPS = ['127.0.0.1']
+
+
 
 EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
