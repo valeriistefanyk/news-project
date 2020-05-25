@@ -14,7 +14,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+INTERNAL_IPS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +23,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'ckeditor',
+    'ckeditor_uploader',
+    'captcha',
+    'debug_toolbar',
 
     'news.apps.NewsConfig',
     'accounts.apps.AccountsConfig',
@@ -35,6 +40,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -101,8 +107,10 @@ STATICFILES_DIRS = [
 MEDIA_URL = env.str('MEDIA_URL', default='/media/')
 MEDIA_ROOT = public_root('media')
 
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
-INTERNAL_IPS = ['127.0.0.1']
+
+
 
 EMAIL_HOST = 'smtp.ukr.net'
 EMAIL_PORT = 465
@@ -110,3 +118,12 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': public_root('django_cache')
+    }
+}
+print(public_root('django_cache'))
