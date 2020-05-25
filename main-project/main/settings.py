@@ -26,6 +26,8 @@ INSTALLED_APPS = [
 
     'ckeditor',
     'ckeditor_uploader',
+    'captcha',
+    'debug_toolbar',
 
     'news.apps.NewsConfig',
     'accounts.apps.AccountsConfig',
@@ -38,6 +40,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -115,3 +118,12 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': public_root('django_cache')
+    }
+}
+print(public_root('django_cache'))

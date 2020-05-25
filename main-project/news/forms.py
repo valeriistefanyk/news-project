@@ -2,6 +2,7 @@ from django import forms
 from news.models import News
 import re
 from django.core.exceptions import ValidationError
+from captcha.fields import CaptchaField, CaptchaTextInput
 
 
 class ContactForm(forms.Form):
@@ -13,6 +14,7 @@ class ContactForm(forms.Form):
         label='Текст', 
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5 })
     )
+    captcha = CaptchaField()
 
 
 class NewsForm(forms.ModelForm):

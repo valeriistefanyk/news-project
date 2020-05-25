@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from news.models import News, Category
-from news.froms import NewsForm, ContactForm
+from news.forms import NewsForm, ContactForm
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +9,7 @@ from django.contrib import messages
 
 from django.core.paginator import Paginator
 
-def test(request):
+def contact(request):
     context = {}
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -27,13 +27,13 @@ def test(request):
             )
             if mail:
                 messages.success(request, 'Успішно відправлено :)')
-                return redirect('news:test')
+                return redirect('news:index-page')
             else:
                 messages.error(request, 'Помилка відправки :(')
     else:
         form = ContactForm()
     context['form'] = form
-    return render(request, 'news/test.html', context)
+    return render(request, 'news/contact.html', context)
 
 
 class HomeNews(ListView):
@@ -50,7 +50,7 @@ class HomeNews(ListView):
         return context
 
     def get_queryset(self):
-        return News.objects.filter(is_published=True)
+        return News.objects.filter(is_published=True).prefetch_related('category')
 
 
 class NewsByCategory(ListView):
