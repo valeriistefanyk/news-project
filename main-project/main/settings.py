@@ -28,9 +28,11 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'captcha',
     'debug_toolbar',
+    'mptt',
 
     'news.apps.NewsConfig',
     'accounts.apps.AccountsConfig',
+    'testapp.apps.TestappConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,4 +128,5 @@ CACHES = {
         'LOCATION': public_root('django_cache')
     }
 }
-print(public_root('django_cache'))
+
+MPTT_ADMIN_LEVEL_INDENT = 20

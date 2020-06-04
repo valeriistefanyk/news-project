@@ -8,9 +8,10 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('news/', include('news.urls')),
     path('captcha/', include('captcha.urls')),
     path('accounts/', include('accounts.urls')),
+    path('test/', include('testapp.urls')),
+    path('', include('news.urls')),
 ]
 
 if settings.DEBUG:
